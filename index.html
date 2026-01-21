@@ -7,19 +7,19 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f4f4f4;
       margin: 0;
-      background: #f7f7f7;
     }
     header {
       background: #2e7d32;
-      color: white;
+      color: #fff;
       padding: 15px;
       text-align: center;
     }
     .container {
       max-width: 600px;
       margin: 20px auto;
-      background: white;
+      background: #fff;
       padding: 20px;
       border-radius: 8px;
     }
@@ -32,9 +32,15 @@
       margin-top: 6px;
       margin-bottom: 15px;
     }
+    .price-box {
+      background: #e8f5e9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
     button {
       background: #25d366;
-      color: white;
+      color: #fff;
       border: none;
       font-size: 16px;
       cursor: pointer;
@@ -42,6 +48,10 @@
     }
     button:hover {
       background: #1ebe5d;
+    }
+    .map {
+      text-align: center;
+      margin-top: 20px;
     }
     footer {
       text-align: center;
@@ -55,32 +65,50 @@
 
 <header>
   <h1>🍄 Fresh Mushroom Store</h1>
-  <p>Farm Fresh • Daily Harvest</p>
+  <p>Farm Fresh • Daily Delivery</p>
 </header>
 
 <div class="container">
   <h2>Place Your Order</h2>
 
   <label>Customer Name</label>
-  <input type="text" id="name" placeholder="Enter your name">
+  <input type="text" id="name">
 
   <label>Mobile Number</label>
-  <input type="tel" id="mobile" placeholder="Enter your phone number">
+  <input type="tel" id="mobile">
 
   <label>Mushroom Type</label>
-  <select id="product">
-    <option>Oyster Mushroom</option>
-    <option>Button Mushroom</option>
-    <option>Milky Mushroom</option>
+  <select id="product" onchange="calculatePrice()">
+    <option value="200">Oyster Mushroom – ₹200/kg</option>
+    <option value="180">Button Mushroom – ₹180/kg</option>
+    <option value="220">Milky Mushroom – ₹220/kg</option>
   </select>
 
-  <label>Quantity (in KG)</label>
-  <input type="number" id="qty" placeholder="Example: 1">
+  <label>Quantity (KG)</label>
+  <input type="number" id="qty" value="1" min="1" onchange="calculatePrice()">
+
+  <label>Delivery Type</label>
+  <select id="delivery" onchange="calculatePrice()">
+    <option value="30">Local Delivery – ₹30</option>
+    <option value="50">Outside Area – ₹50</option>
+  </select>
+
+  <div class="price-box">
+    <p><b>Item Price:</b> ₹<span id="itemPrice">0</span></p>
+    <p><b>Delivery Charge:</b> ₹<span id="deliveryCharge">0</span></p>
+    <p><b>Total Amount:</b> ₹<span id="totalPrice">0</span></p>
+  </div>
 
   <label>Delivery Address</label>
-  <textarea id="address" placeholder="Enter delivery location"></textarea>
+  <textarea id="address"></textarea>
 
   <button onclick="sendWhatsApp()">Order on WhatsApp</button>
+
+  <div class="map">
+    📍 <a href="https://www.google.com/maps?q=Singasandra+Bangalore" target="_blank">
+      Find us on Google Maps
+    </a>
+  </div>
 </div>
 
 <footer>
@@ -88,21 +116,38 @@
 </footer>
 
 <script>
+  function calculatePrice() {
+    let pricePerKg = document.getElementById("product").value;
+    let qty = document.getElementById("qty").value;
+    let delivery = document.getElementById("delivery").value;
+
+    let itemTotal = pricePerKg * qty;
+    let total = itemTotal + Number(delivery);
+
+    document.getElementById("itemPrice").innerText = itemTotal;
+    document.getElementById("deliveryCharge").innerText = delivery;
+    document.getElementById("totalPrice").innerText = total;
+  }
+
+  calculatePrice();
+
   function sendWhatsApp() {
     let name = document.getElementById("name").value;
     let mobile = document.getElementById("mobile").value;
-    let product = document.getElementById("product").value;
+    let productText = document.getElementById("product").selectedOptions[0].text;
     let qty = document.getElementById("qty").value;
     let address = document.getElementById("address").value;
+    let total = document.getElementById("totalPrice").innerText;
 
-    let ownerNumber = "7676894399"; // 👉 Replace with YOUR WhatsApp number
+    let ownerNumber = "91XXXXXXXXXX"; // 🔴 Replace with your WhatsApp number
 
     let message =
       "🍄 *New Mushroom Order* %0A%0A" +
       "Name: " + name + "%0A" +
       "Mobile: " + mobile + "%0A" +
-      "Product: " + product + "%0A" +
+      "Product: " + productText + "%0A" +
       "Quantity: " + qty + " KG%0A" +
+      "Total Amount: ₹" + total + "%0A%0A" +
       "Address: " + address;
 
     let url = "https://wa.me/" + ownerNumber + "?text=" + message;
@@ -112,4 +157,3 @@
 
 </body>
 </html>
-
