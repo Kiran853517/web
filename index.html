@@ -5,93 +5,97 @@
   <title>Fresh Mushroom Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
-    header { background: #2e7d32; color: white; padding: 15px; text-align: center; }
-    .container { max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; }
-    label { font-weight: bold; }
-    input, select, textarea, button {
-      width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 15px;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f7f7f7;
     }
-    .price-box { background: #e8f5e9; padding: 10px; border-radius: 5px; }
-    button { background: #25d366; color: white; border: none; font-size: 16px; cursor: pointer; }
-    button:hover { background: #1ebe5d; }
-    .map-link { margin-bottom: 10px; }
+    header {
+      background: #2e7d32;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 15px;
+    }
+    button {
+      background: #25d366;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #1ebe5d;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      color: #555;
+    }
   </style>
 </head>
 <body>
 
 <header>
   <h1>🍄 Fresh Mushroom Store</h1>
-  <p>Farm Fresh • Distance-Based Delivery</p>
+  <p>Farm Fresh • Daily Harvest</p>
 </header>
 
 <div class="container">
   <h2>Place Your Order</h2>
 
   <label>Customer Name</label>
-  <input type="text" id="name">
+  <input type="text" id="name" placeholder="Enter your name">
 
   <label>Mobile Number</label>
-  <input type="tel" id="mobile">
+  <input type="tel" id="mobile" placeholder="Enter your phone number">
 
   <label>Mushroom Type</label>
-  <select id="product" onchange="calculateTotal()">
-    <option value="200">Oyster Mushroom – ₹200/kg</option>
-    <option value="180">Button Mushroom – ₹180/kg</option>
-    <option value="220">Milky Mushroom – ₹220/kg</option>
+  <select id="product">
+    <option>Oyster Mushroom</option>
+    <option>Button Mushroom</option>
+    <option>Milky Mushroom</option>
   </select>
 
-  <label>Quantity (KG)</label>
-  <input type="number" id="qty" value="1" min="1" onchange="calculateTotal()">
-
-  <div class="map-link">
-    📍 <a href="https://www.google.com/maps/dir/?api=1&origin=Singasandra+Bangalore"
-       target="_blank">
-       Select your delivery location on Google Maps
-    </a>
-  </div>
-
-  <label>Distance (KM) from Map</label>
-  <input type="number" id="distance" placeholder="Enter distance shown in Google Maps"
-         onchange="calculateTotal()">
-
-  <div class="price-box">
-    <p><b>Item Price:</b> ₹<span id="itemPrice">0</span></p>
-    <p><b>Delivery Charge (₹50/KM):</b> ₹<span id="deliveryCharge">0</span></p>
-    <p><b>Total Amount:</b> ₹<span id="totalPrice">0</span></p>
-  </div>
+  <label>Quantity (in KG)</label>
+  <input type="number" id="qty" placeholder="Example: 1">
 
   <label>Delivery Address</label>
-  <textarea id="address"></textarea>
+  <textarea id="address" placeholder="Enter delivery location"></textarea>
 
   <button onclick="sendWhatsApp()">Order on WhatsApp</button>
 </div>
 
+<footer>
+  © 2026 Fresh Mushroom Store
+</footer>
+
 <script>
-  function calculateTotal() {
-    let pricePerKg = Number(document.getElementById("product").value);
-    let qty = Number(document.getElementById("qty").value);
-    let distance = Number(document.getElementById("distance").value);
-
-    let itemTotal = pricePerKg * qty;
-    let deliveryCharge = distance * 50;
-    let total = itemTotal + deliveryCharge;
-
-    document.getElementById("itemPrice").innerText = itemTotal;
-    document.getElementById("deliveryCharge").innerText = deliveryCharge;
-    document.getElementById("totalPrice").innerText = total;
-  }
-
   function sendWhatsApp() {
     let name = document.getElementById("name").value;
     let mobile = document.getElementById("mobile").value;
-    let product = document.getElementById("product").selectedOptions[0].text;
+    let product = document.getElementById("product").value;
     let qty = document.getElementById("qty").value;
-    let distance = document.getElementById("distance").value;
-    let total = document.getElementById("totalPrice").innerText;
     let address = document.getElementById("address").value;
 
-    let ownerNumber = "91XXXXXXXXXX"; // 🔴 Replace with your WhatsApp number
+    let ownerNumber = "91XXXXXXXXXX"; // 👉 Replace with YOUR WhatsApp number
 
     let message =
       "🍄 *New Mushroom Order* %0A%0A" +
@@ -99,12 +103,10 @@
       "Mobile: " + mobile + "%0A" +
       "Product: " + product + "%0A" +
       "Quantity: " + qty + " KG%0A" +
-      "Distance: " + distance + " KM%0A" +
-      "Delivery Charge: ₹" + (distance * 50) + "%0A" +
-      "Total Amount: ₹" + total + "%0A%0A" +
       "Address: " + address;
 
-    window.open("https://wa.me/" + ownerNumber + "?text=" + message, "_blank");
+    let url = "https://wa.me/" + ownerNumber + "?text=" + message;
+    window.open(url, "_blank");
   }
 </script>
 
